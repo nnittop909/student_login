@@ -1,0 +1,9 @@
+<div class="col-md-4 col-md-offset-4">
+	<h1>Please Login</h1>
+
+  <%=form_tag student_logins_path, method: :get do %>
+    <%= text_field_tag :id_number, params[:id_number], class: 'form-control input-lg', placeholder:"ID Number...", autofocus: true %>
+    <br>
+    <%= submit_tag "Sign-in", name: nil, class: "btn btn-lg pull-right" %>
+  <% end %>
+</div>

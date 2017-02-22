@@ -1,0 +1,26 @@
+<div class="col-md-8 col-md-offset-2">
+	<h1>Logged Students</h1>
+	<hr>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>ID Number</th>
+				<th>Course/Yr. Level</th>
+				<th>Gender</th>
+				<th>Option</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @logins.each do |login| %>
+				<tr>
+					<td><%= login.student.full_name %></td>
+					<td><%= login.student.id_number %></td>
+					<td><%= login.student.course %> - <%= login.student.year_level %></td>
+					<td><%= time_ago_in_words login.created_at %> ago</td>
+					<td><%= link_to 'Log-out', login, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>
