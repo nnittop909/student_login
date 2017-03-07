@@ -56,8 +56,6 @@
           <th>Time In</th>
           <th>Time Out</th>
           <th>Time Consumed</th>
-          <th></th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -66,8 +64,6 @@
             <td><%= internet_usage.time_in.strftime("%B %d, %Y at %I:%M%p") %></td>
             <td><%= internet_usage.time_out.strftime("%B %d, %Y at %I:%M%p") %></td>
             <td><%= internet_usage.usage_in_time_format %></td>
-            <td><%= internet_usage.time_diff.round.abs %></td>
-            <td><%= internet_usage.time_consumption %></td>
           </tr>
         <% end %>
       </tbody>
