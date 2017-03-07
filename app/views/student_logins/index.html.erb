@@ -2,12 +2,9 @@
 
 	<div class="panel panel-default">
     <div class="panel-heading">
-        <h4 cla> Please Login</h4>
+        <h4 cla> Student Login</h4>
     </div>
     <div class="panel-body">
-      <%=image_tag("default.png", height: 100, width: 100, class: 'img-circle img-responsive center-block') %>
-      <br>
-      <br>
   		<%=form_tag student_logins_path, method: :get do %>
     		<%= text_field_tag :id_number, params[:id_number], class: 'form-control input-lg', placeholder:"ID Number...", autofocus: true %>
     		<br>
