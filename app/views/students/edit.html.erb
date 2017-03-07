@@ -1,6 +1,31 @@
-<h1>Editing Student</h1>
+<%= simple_form_for(@student) do |f| %>
+  <%= f.error_notification %>
+<div class="col-md-4 col-md-offset-4">
+	<h1>Update Info</h1>
+  <div class="form-inputs">
+    <%= f.input :id_number %>
+    <%= f.input :first_name %>
+    <%= f.input :last_name %>
+    <%= f.input :middle_name %>
+    <div class="row">
+    	<div class="col-md-8">
+		    <%= f.input :course, collection: Student.courses %>
+		  </div>
+		  <div class="col-md-4">
+		    <%= f.input :year_level, collection: Student.year_levels %>
+		  </div>
+		</div>
+    <%= f.input :gender, collection: Student.genders.keys.to_a.map {|r| [ r.titleize, r ] } %>
+    <%= f.input :address %>
+  </div>
 
-<%= render 'form', student: @student %>
+  <div class="form-actions pull-right">
+    <%= link_to 'Back', students_path %>
+    <%= f.button :submit %>
+  </div>
+</div>
+<% end %>
 
-<%= link_to 'Show', @student %> |
-<%= link_to 'Back', students_path %>
+
+
+

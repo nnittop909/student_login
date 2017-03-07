@@ -12,4 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require autocomplete-rails
+//= require bootstrap-datepicker
+//= require select2
 //= require_tree .

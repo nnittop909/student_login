@@ -17,7 +17,7 @@
 		<tbody>
 			<% @students.each do |student| %>
 				<tr>
-					<td><%= student.full_name %></td>
+					<td><%= link_to student.full_name, student %></td>
 					<td><%= student.id_number %></td>
 					<td><%= student.gender %></td>
 					<td><%= student.course %> - <%= student.year_level %></td>

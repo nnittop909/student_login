@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   helper_method :account_url
 
   def after_sign_in_path_for(current_user)
-    root_url
+    users_admin_index_url
   end
 
   def account_url

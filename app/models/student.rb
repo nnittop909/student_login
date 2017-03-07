@@ -1,5 +1,6 @@
 class Student < ApplicationRecord
 	has_many :logins
+	has_many :internet_usages
 
 	enum gender:[:male, :female]
 
@@ -12,6 +13,10 @@ class Student < ApplicationRecord
 
 	def self.year_levels
 		%w(I II III IV V)
+	end
+
+	def course_and_year
+		"#{course} - #{year_level}" 
 	end
 
 	def full_name

@@ -1,5 +1,13 @@
 class StudentsController < ApplicationController
   before_action :set_student, only: [:show, :edit, :update, :destroy]
+  skip_before_action :authenticate_user!
+  before_action :check_auth
+
+  def check_auth
+    unless user_signed_in?
+        redirect_to :controller => :student_logins
+    end
+  end
 
   # GET /students
   # GET /students.json
@@ -25,15 +33,10 @@ class StudentsController < ApplicationController
   # POST /students.json
   def create
     @student = Student.new(student_params)
-
-    respond_to do |format|
-      if @student.save
-        format.html { redirect_to @student, notice: 'Student was successfully created.' }
-        format.json { render :show, status: :created, location: @student }
-      else
-        format.html { render :new }
-        format.json { render json: @student.errors, status: :unprocessable_entity }
-      end
+    if @student.save
+      redirect_to @student, notice: 'Student was successfully created.'
+    else
+      ender :new
     end
   end
 
