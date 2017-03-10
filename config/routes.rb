@@ -10,7 +10,14 @@ Rails.application.routes.draw do
     get "landing/index"
   end
 
-  resources :students
+  get 'settings/index'
+
+  resources :students do
+  	match "/profile" => "students#profile", as: :profile, via: [:get], on: :member
+  	match "/usages" => "students#usages", as: :usages, via: [:get], on: :member
+  end
   resources :logins
   resources :student_logins
+  resources :alloted_times
+  resources :users
 end

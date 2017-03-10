@@ -1,0 +1,37 @@
+<div class="tab-pane <%='active' if current_page? usages_student_path %>">
+  <br>
+  <br>
+  <div class="row">
+    <div class="col-md-4">
+      <h3 class="text-center text-warning"><%= @student.internet_usages.total_time_consumption %></h3>
+      <p class="text-center">USED</p>
+    </div>
+    <div class="col-md-4">
+      <h3 class="text-center text-success"><%= @student.internet_usages.total_remaining %></h3>
+      <p class="text-center">REMAINING</p>
+    </div>
+    <div class="col-md-4">
+      <h3 class="text-center text-danger"><%= @student.internet_usages.excess %></h3>
+      <p class="text-center">EXCESS</p>
+    </div>
+  </div>
+  <hr>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Time In</th>
+        <th>Time Out</th>
+        <th>Time Consumed</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @student.internet_usages.each do |internet_usage| %>
+        <tr>
+          <td><%= internet_usage.time_in.strftime("%B %d, %Y at %I:%M%p") %></td>
+          <td><%= internet_usage.time_out.strftime("%B %d, %Y at %I:%M%p") %></td>
+          <td><%= internet_usage.usage_in_time_format %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

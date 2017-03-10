@@ -1,0 +1,51 @@
+<div class="tab-pane <%='active' if current_page? profile_student_path %>">
+  <br>
+  <br>
+  <div class="row">
+    <div class="col-md-12">
+      <%= link_to "Update Profile", edit_student_path(@student), class: 'btn btn-primary pull-right'%>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-3">
+      <%if @student.profile_photo.blank? %>
+        <center><%=image_tag("default.png", height: 100, width: 100, :class=>"img-square") %></center>
+      <% else %>
+        <center><%= image_tag @student.profile_photo.url(:large), class: 'center-block img-responsive img-rounded'%></center>
+      <% end %>
+    </div>
+    <div class="col-md-9">
+      <table class="table">
+        <tr>
+          <td>First name</td>
+          <td class="text-info"><%= @student.first_name %></td>
+        </tr>
+        <tr>
+          <td>Last name</td>
+          <td class="text-info"><%= @student.last_name %></td>
+        </tr>
+        <tr>
+          <td>Middle name</td>
+          <td class="text-info"><%= @student.middle_name %></td>
+        </tr>
+        <tr>
+          <td>ID Number</td>
+          <td class="text-info"><%= @student.id_number %></td>
+        </tr>
+        <tr>
+          <td>Course/Year</td>
+          <td class="text-info"><%= @student.course_and_year %></td>
+        </tr>
+        <tr>
+          <td>Gender</td>
+          <td class="text-info"><%= @student.gender.capitalize %></td>
+        </tr>
+        <tr>
+          <td>Address</td>
+          <td class="text-info"><%= @student.address %></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

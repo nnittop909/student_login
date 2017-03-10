@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="panel panel-danger">
+      <div class="panel-heading ">
+        <h4>Edit User </h4>
+      </div>
+      <div class="panel-body">
+        <h4 class="text-center">Account Details </h4>
+        <center><%=image_tag("user-login.jpg", height: 80, width: 80, :class=>"img-square") %></center>
+        <hr>
+        <%=simple_form_for @user, url: :user, html: {class: "form-horizontal"}, wrapper: :horizontal_form do |f| %>
+          <%=f.error_notification %>
+          <%=f.input :email %>
+          <%= f.input :username %>
+          <%= f.input :role, collection: User.roles.keys.to_a.map{|a| [a.titleize, a] } %>
+          <hr>
+          <p class="text-muted">*Please fill up the password and password confirmation to apply the changes.</p>
+          <br>
+          <%= f.input :password %>
+          <%= f.input :password_confirmation %>
+          <div class="modal-footer">
+            <div class="pull-left">
+              <%= link_to "Cancel", user_path(@user), class: 'btn btn-default' %>
+            </div>
+            <%=f.submit 'Update', class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    $("#user_role").select2({
+      theme: "bootstrap"
+    });
+  });
+</script>

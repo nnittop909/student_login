@@ -23,4 +23,8 @@ class User < ApplicationRecord
       where(conditions.to_h).first
     end
   end
+
+  enum role:[:admin, :student]
+  
+  
 end

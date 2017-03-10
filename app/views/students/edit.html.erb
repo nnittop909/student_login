@@ -1,31 +1,63 @@
 <%= simple_form_for(@student) do |f| %>
   <%= f.error_notification %>
-<div class="col-md-4 col-md-offset-4">
-	<h1>Update Info</h1>
-  <div class="form-inputs">
-    <%= f.input :id_number %>
-    <%= f.input :first_name %>
-    <%= f.input :last_name %>
-    <%= f.input :middle_name %>
-    <div class="row">
-    	<div class="col-md-8">
-		    <%= f.input :course, collection: Student.courses %>
-		  </div>
-		  <div class="col-md-4">
-		    <%= f.input :year_level, collection: Student.year_levels %>
-		  </div>
-		</div>
-    <%= f.input :gender, collection: Student.genders.keys.to_a.map {|r| [ r.titleize, r ] } %>
-    <%= f.input :address %>
-  </div>
-
-  <div class="form-actions pull-right">
-    <%= link_to 'Back', students_path %>
-    <%= f.button :submit %>
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4>Update Info</h4>
+      </div>
+      <div class="panel-body">
+        <%if @student.profile_photo.blank? %>
+          <center><%=image_tag("default.png", height: 80, width: 80, :class=>"img-square") %></center>
+        <% else %>
+          <center><%= image_tag @student.profile_photo.url(:large), class: 'center-block img-responsive img-rounded'%></center>
+        <% end %>
+        <center><%= f.input :profile_photo, as: :file %></center>
+        <hr>
+        <div class="form-inputs">
+          <div class="row">
+            <div class="col-md-4">
+              <%= f.input :id_number, label: 'ID Number' %>
+            </div>
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-4">
+              <%= f.input :course, collection: Student.courses %>
+            </div>
+            <div class="col-md-2">
+              <%= f.input :year_level, collection: Student.year_levels %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <%= f.input :last_name %>
+            </div>
+            <div class="col-md-4">
+              <%= f.input :first_name %>
+            </div>
+            <div class="col-md-4">
+              <%= f.input :middle_name %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <%= f.input :gender, collection: Student.genders.keys.to_a.map {|r| [ r.titleize, r ] } %>
+            </div>
+            <div class="col-md-8">
+              <%= f.input :address %>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="form-actions">
+          <%= link_to 'Cancel', students_path %>
+          <%= f.button :submit, class: "pull-right" %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <% end %>
-
 
 
 

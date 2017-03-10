@@ -2,12 +2,16 @@
 
 	<div class="panel panel-default">
     <div class="panel-heading">
-        <h4 cla> Student Login</h4>
+        <h4> Student Login</h4>
     </div>
     <div class="panel-body">
+      <br>
   		<%=form_tag student_logins_path, method: :get do %>
     		<%= text_field_tag :id_number, params[:id_number], class: 'form-control input-lg', placeholder:"ID Number...", autofocus: true %>
     		<br>
+        <br>
+        <hr>
+        <%= link_to "Cancel", logins_path%>
     		<%= submit_tag "Sign-in", name: nil, class: "btn btn-lg pull-right" %>
     	<% end %>
     </div>
