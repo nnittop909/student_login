@@ -1,0 +1,65 @@
+
+
+Sun Mar 12 18:11:50 2017
+Command line: TestDisk
+
+TestDisk 6.14, Data Recovery Utility, July 2013
+Christophe GRENIER <grenier@cgsecurity.org>
+http://www.cgsecurity.org
+OS: Linux, kernel 4.2.0-38-generic (#45~14.04.1-Ubuntu SMP Thu Jun 9 09:27:51 UTC 2016) x86_64
+Compiler: GCC 4.8
+Compilation date: 2013-10-29T01:29:29
+ext2fs lib: 1.42.9, ntfs lib: libntfs-3g, reiserfs lib: none, ewf lib: none
+/dev/sda: LBA, HPA, LBA48, DCO support
+/dev/sda: size       976773168 sectors
+/dev/sda: user_max   976773168 sectors
+/dev/sda: native_max 976773168 sectors
+/dev/sda: dco        976773168 sectors
+Warning: can't get size for Disk /dev/mapper/control - 0 B - 1 sectors, sector size=512
+Hard disk list
+Disk /dev/sda - 500 GB / 465 GiB - CHS 60801 255 63, sector size=512 - TOSHIBA MQ01ABF050, S/N:45UPTU3HT, FW:AM0P1D
+Disk /dev/sdb - 1000 GB / 931 GiB - CHS 121597 255 63, sector size=512 - WD Elements 10B8, FW:1012
+Disk /dev/sr1 - 11 MB / 10 MiB - 5586 sectors (RO), sector size=2048 - Linux File-Stor Gadget, FW:0000
+
+Partition table type (auto): Intel
+Disk /dev/sdb - 1000 GB / 931 GiB - WD Elements 10B8
+Partition table type: Intel
+
+Interface Advanced
+Geometry from i386 MBR: head=255 sector=63
+NTFS at 1/1/1
+get_geometry_from_list_part_aux head=255 nbr=2
+get_geometry_from_list_part_aux head=8 nbr=1
+get_geometry_from_list_part_aux head=16 nbr=1
+get_geometry_from_list_part_aux head=32 nbr=1
+get_geometry_from_list_part_aux head=64 nbr=1
+get_geometry_from_list_part_aux head=128 nbr=1
+get_geometry_from_list_part_aux head=255 nbr=2
+ 1 P HPFS - NTFS              1   1  1 121597 254 63 1953455742 [yhamyy]
+     NTFS, blocksize=4096, 1000 GB / 931 GiB
+
+ntfs_boot_sector
+ 1 P HPFS - NTFS              1   1  1 121597 254 63 1953455742 [yhamyy]
+     NTFS, blocksize=4096, 1000 GB / 931 GiB
+NTFS at 1/1/1
+filesystem size           1953455742 1
+sectors_per_cluster       8 0
+mft_lcn                   853 0
+mftmirr_lcn               2 0
+clusters_per_mft_record   -10 0
+clusters_per_index_record 1 0
+Boot sector
+Status: OK
+
+Backup boot sector
+ntfs_boot_sector: Can't read backup boot sector.
+Status: Bad
+
+Sectors are not identical.
+
+A valid NTFS Boot sector must be present in order to access
+any data; even if the partition is not bootable.
+A new copy of MBR code has been written.
+You have to reboot for the change to take effect.
+
+TestDisk exited normally.

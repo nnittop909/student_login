@@ -1,0 +1,104 @@
+<h3>Reports Section</h3>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h4>Internet Usages</h4>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-4">
+            <%=link_to internet_usages_scope_to_date_path(from_date: Time.zone.now.beginning_of_day, to_date: Time.zone.now.end_of_day, format: 'pdf') do %>
+              <h4 class="text-center"> Daily Internet Usage Report </h4>
+            <% end %>
+            <hr>
+          </div>
+          <div class="col-md-4">
+            <%=link_to internet_usages_scope_to_date_path(from_date: Time.zone.now.beginning_of_week, to_date: Time.zone.now.end_of_week, format: 'pdf') do %>
+              <h4 class="text-center"> Weekly Internet Usage Report </h4>
+            <% end %>
+            <hr>
+          </div>
+          <div class="col-md-4">
+            <%=link_to internet_usages_scope_to_date_path(from_date: Time.zone.now.beginning_of_month, to_date: Time.zone.now.end_of_month, format: 'pdf') do %>
+              <h4 class="text-center"> Monthly Internet Usage Report </h4>
+            <% end %>
+            <hr>
+          </div>
+          <div class="col-md-12">
+            <h4> Course and Year Filters </h4>
+            <p class="text-muted">Generate report on internet usage by course and year level.</p>
+            <%= form_tag({:action => "scope_to_date", controller: "internet_usages", format: 'pdf'}, {:method => :get})  do %>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <%= select_tag :course_id, options_from_collection_for_select(Course.all, :id, :name, params[:course_id]), include_blank: '- Select Course -', class: 'form-control', id: "scope_to_date_course_id", label: false %>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <%= select_tag :year_level, options_from_collection_for_select(YearLevel.all, :id, :name, params[:year_level]), include_blank: '- Select Year Level -', class: 'form-control', id: "scope_to_date_year_level_id", label: false %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <%= text_field_tag :from_date, @from_date, :class => 'datepicker form-control border-input', :placeholder => "From " %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <%= text_field_tag :to_date, @to_date, :class => 'form-control border-input datepicker', :placeholder => "To " %>
+                  </div>
+                </div>
+                <div class="col-md-1">
+                  <button type="submit" class="btn btn-success active pull-right"> Go </button>
+                </div>
+              </div>
+            <% end %>
+            <hr>
+            <h4> Student Filters </h4>
+            <p class="text-muted">Generate report on student internet usage.</p>
+            <%= form_tag({:action => "student_scope_to_date", controller: "internet_usages", format: 'pdf'}, {:method => :get})  do %>
+              <div class="row">
+                <div class="col-md-5">
+                  <div class="form-group">
+                    <%= select_tag :student_id, options_from_collection_for_select(Student.all, :id, :fullname_and_id_number, params[:student_id]), include_blank: '- Select Student or search by ID Number or by Name -', class: 'form-control', id: "scope_to_date_student_id", label: false %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <%= text_field_tag :from_date, @from_date, :class => 'datepicker form-control border-input', :placeholder => "From ", default: Time.zone.now.beginning_of_month %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <%= text_field_tag :to_date, @to_date, :class => 'form-control border-input datepicker', :placeholder => "To ", default: Time.zone.now.end_of_month %>
+                  </div>
+                </div>
+                <div class="col-md-1">
+                  <button type="submit" class="btn btn-success active pull-right"> Go </button>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $( "#scope_to_date_course_id" ).select2({
+    theme: "bootstrap"
+  });
+</script>
+<script type="text/javascript">
+  $( "#scope_to_date_year_level_id" ).select2({
+    theme: "bootstrap"
+  });
+</script>
+<script type="text/javascript">
+  $( "#scope_to_date_student_id" ).select2({
+    theme: "bootstrap"
+  });
+</script>

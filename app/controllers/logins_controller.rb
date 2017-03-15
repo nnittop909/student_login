@@ -6,6 +6,7 @@ class LoginsController < ApplicationController
 
   def destroy
     @login = Login.find(params[:id])
+    @login.set_status
     @login.destroy
     respond_to do |format|
       format.html { redirect_to logins_path, notice: 'Student has been signed out.' }

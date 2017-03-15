@@ -4,6 +4,6 @@ $("ul.errors").html("")
     $("ul.errors").append($("<li />").html("<%= message.html_safe %>"))
   <% end %>
 <% else %>
-  $("#alloted_time-modal").modal("hide")
+  $("#alloted-time-modal").modal("hide")
   window.location.reload();
 <% end %>

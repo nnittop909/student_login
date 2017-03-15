@@ -1,24 +1,52 @@
 <div class="row">
-	<div class="col-md-4 col-md-offset-4">
-		<h1>Settings</h1>
-
-		<div class="row">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h4> Alloted Usage Time</h4>
-				</div>
-				<div class="panel-body">
-					<% if @alloted_times.present? %>
-						<table class="table">
-							<tr>
-								<td><h4><%= @alloted_times.last.duration %> Hours</h4></td>
-								<td class="text-right"><%=link_to 'Update Usage Time', edit_alloted_time_path(@alloted_times.last), class: 'btn btn-warning', remote: true %></td>
-							</tr>
-						</table>
-					<% else %>
-						<%=link_to 'Set Usage Time', new_alloted_time_path, class: 'btn btn-primary', remote: true %>
+	<div class="col-md-12"><h4>Settings</h4></div>
+	<div class="col-md-6">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4> Alloted Usage Time
+					<% if @alloted_times.blank? %>
+						<%=link_to 'Set Usage Time', new_alloted_time_path, class: 'btn btn-primary pull-right', remote: true %>
 					<% end %>
-				</div>
+				</h4>
+			</div>
+			<div class="panel-body">
+				<% if @alloted_times.present? %>
+					<table class="table">
+						<tr>
+							<td><h4><%= @alloted_times.last.duration %> Hours</h4></td>
+							<td class="text-right"><%=link_to 'Update Usage Time', edit_alloted_time_path(@alloted_times.last), class: 'btn btn-warning btn-sm', remote: true %></td>
+						</tr>
+					</table>
+				<% end %>
+			</div>
+		</div>
+		<div class="panel panel-danger">
+			<div class="panel-heading">
+				<h4> Reset Internet Usage</h4>
+			</div>
+			<div class="panel-body">
+				<%=link_to reset_usages_path, data: { confirm: "Are you sure you want to CLEAR ALL INTERNET USAGE? This action cannot be undone!"} do %>
+        	<center><span class="btn btn-danger" title="CLEAR USAGE" data-toggle='tooltip'><i class="fa fa-exclamation"></i> RESET INTERNET USAGE</span></center>
+        <% end %>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<h4> Courses
+					<%=link_to 'New Course', new_course_path, class: 'btn btn-primary pull-right', remote: true %>
+				</h4>
+			</div>
+			<div class="panel-body">
+				<table class="table">
+					<% @courses.each do |course| %>
+						<tr>
+							<td><%= course.name %></td>
+							<td class="text-right"><%=link_to 'Update Course', edit_course_path(course), class: 'btn btn-warning btn-xs', remote: true %></td>
+						</tr>
+					<% end %>
+				</table>
 			</div>
 		</div>
 	</div>

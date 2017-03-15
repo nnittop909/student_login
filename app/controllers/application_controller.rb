@@ -9,7 +9,11 @@ class ApplicationController < ActionController::Base
   helper_method :account_url
 
   def after_sign_in_path_for(current_user)
-    users_admin_index_url
+    if current_user.admin?
+      logins_url
+    else
+      students_url
+    end
   end
 
   def account_url

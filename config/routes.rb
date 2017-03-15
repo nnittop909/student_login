@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  
-  get 'users/admin/index'
 
   root "landing#index"
 
@@ -11,13 +9,21 @@ Rails.application.routes.draw do
   end
 
   get 'settings/index'
+  get 'reports/index'
+  get 'reset_usages/reset', as: :reset_usages
+  match "internet_usages/scope_to_date" => "internet_usages#scope_to_date",  via: [:get]
+  match "internet_usages/student_scope_to_date" => "internet_usages#student_scope_to_date",  via: [:get]
+  match "students/scope_to_date" => "students#scope_to_date",  via: [:get]
 
   resources :students do
+    get :autocomplete_student_full_name, on: :collection
   	match "/profile" => "students#profile", as: :profile, via: [:get], on: :member
   	match "/usages" => "students#usages", as: :usages, via: [:get], on: :member
   end
+
   resources :logins
   resources :student_logins
   resources :alloted_times
   resources :users
+  resources :courses
 end

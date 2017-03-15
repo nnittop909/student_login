@@ -22,10 +22,10 @@
             <div class="col-md-2">
             </div>
             <div class="col-md-4">
-              <%= f.input :course, collection: Student.courses %>
+              <%= f.input :course_id, collection: Course.all %>
             </div>
             <div class="col-md-2">
-              <%= f.input :year_level, collection: Student.year_levels %>
+              <%= f.input :year_level_id, collection: YearLevel.all %>
             </div>
           </div>
           <div class="row">

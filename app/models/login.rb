@@ -12,10 +12,10 @@ class Login < ApplicationRecord
 	end
 
 	def create_time_consumption
-		InternetUsage.create!(:student_id => self.student.id, :time_in => self.created_at, :time_out => self.log_out_time, :time_consumption => self.calculate_time_consumption)
+		InternetUsage.create!(:student_id => self.student.id, :course_id => self.student.course_id, :year_level_id => self.student.year_level_id, :time_in => self.created_at, :time_out => self.log_out_time, :time_consumption => self.calculate_time_consumption)
 	end
 
-	def with_excess?
+	def exceeded?
 		if self.student.internet_usages.present?
 			self.student.internet_usages.remaining.negative?
 		else
@@ -24,7 +24,7 @@ class Login < ApplicationRecord
 	end
 
 	def set_usage_status
-		if self.student.with_excess?
+		if self.student.exceeded?
 			self.student.with_excess!
 		else
 			self.student.no_excess!

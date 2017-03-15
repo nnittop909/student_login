@@ -1,5 +1,42 @@
 class InternetUsage < ApplicationRecord
-	belongs_to :students
+	belongs_to :student
+	belongs_to :year_level
+	belongs_to :course
+
+	def self.filter_with(hash={})
+    if hash[:from_date] && hash[:to_date] && hash[:course_id].present?
+    	course_id = hash[:course_id] unless hash[:course_id].blank?
+      from_date = hash[:from_date].kind_of?(Time) ? hash[:from_date] : Time.parse(hash[:from_date].strftime('%Y-%m-%d 12:00:00')).beginning_of_day
+      to_date = hash[:to_date].kind_of?(Time) ? hash[:to_date] : Time.parse(hash[:to_date].strftime('%Y-%m-%d 12:59:59')).end_of_day
+      all.where('created_at' => from_date..to_date).where(:course_id => course_id)
+
+    elsif hash[:from_date] && hash[:to_date] && hash[:year_level_id].present?
+    	year_level_id = hash[:year_level_id] unless hash[:year_level_id].blank?
+      from_date = hash[:from_date].kind_of?(Time) ? hash[:from_date] : Time.parse(hash[:from_date].strftime('%Y-%m-%d 12:00:00')).beginning_of_day
+      to_date = hash[:to_date].kind_of?(Time) ? hash[:to_date] : Time.parse(hash[:to_date].strftime('%Y-%m-%d 12:59:59')).end_of_day
+      all.where('created_at' => from_date..to_date).where('year_level_id' => year_level_id)
+
+    elsif hash[:from_date] && hash[:to_date] && hash[:course_id].present? && hash[:year_level_id].present?
+    	course_id = hash[:course_id] unless hash[:course_id].blank?
+    	year_level_id = hash[:year_level_id] unless hash[:year_level_id].blank?
+      from_date = hash[:from_date].kind_of?(Time) ? hash[:from_date] : Time.parse(hash[:from_date].strftime('%Y-%m-%d 12:00:00')).beginning_of_day
+      to_date = hash[:to_date].kind_of?(Time) ? hash[:to_date] : Time.parse(hash[:to_date].strftime('%Y-%m-%d 12:59:59')).end_of_day
+      all.where('created_at' => from_date..to_date).where('course_id' => course_id).where('year_level_id' => year_level_id)
+
+    elsif hash[:from_date] && hash[:to_date] && hash[:student_id]
+    	student_id = hash[:student_id] unless hash[:student_id].blank?
+      from_date = hash[:from_date].kind_of?(Time) ? hash[:from_date] : Time.parse(hash[:from_date].strftime('%Y-%m-%d 12:00:00')).beginning_of_day
+      to_date = hash[:to_date].kind_of?(Time) ? hash[:to_date] : Time.parse(hash[:to_date].strftime('%Y-%m-%d 12:59:59')).end_of_day
+      all.where('created_at' => from_date..to_date).where('student_id' => student_id)
+
+    elsif hash[:from_date] && hash[:to_date]
+      from_date = hash[:from_date].kind_of?(Time) ? hash[:from_date] : Time.parse(hash[:from_date].strftime('%Y-%m-%d 12:00:00')).beginning_of_day
+      to_date = hash[:to_date].kind_of?(Time) ? hash[:to_date] : Time.parse(hash[:to_date].strftime('%Y-%m-%d 12:59:59')).end_of_day
+      all.where('created_at' => from_date..to_date)
+    else
+    	all
+    end
+  end
 
 	def time_diff
 		self.time_out - self.time_in

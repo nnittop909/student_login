@@ -1,4 +1,4 @@
-<div class="col-md-8 col-md-offset-2">
+<div class="col-md-12">
 	<h1>Logged Students
 		<%= link_to "Login", student_logins_path, class: 'btn btn-primary pull-right' %>
 	</h1>
@@ -6,20 +6,26 @@
 	<table class="table table-hover">
 		<thead>
 			<tr>
+				<th>Date</th>
 				<th>ID Number</th>
 				<th>Name</th>
 				<th>Course/Yr. Level</th>
-				<th></th>
+				<th>Used</th>
+				<th>Remaining</th>
+				<th>Excess</th>
 				<th>Option</th>
 			</tr>
 		</thead>
 		<tbody>
 			<% @logins.each do |login| %>
 				<tr>
+					<td><%= login.created_at.strftime("%B %d, %Y") %></td>
 					<td><%= login.student.id_number %></td>
 					<td><%= login.student.full_name %></td>
 					<td><%= login.student.course %> - <%= login.student.year_level %></td>
-					<td><%= time_ago_in_words login.created_at %> ago </td>
+					<td><%= login.student.internet_usages.total_time_consumption %></td>
+					<td><%= login.student.internet_usages.total_remaining %></td>
+					<td><%= login.student.internet_usages.excess %></td>
 					<td><%= link_to 'Log-out', login, method: :delete, data: { confirm: 'Are you sure?' } %></td>
 				</tr>
 			<% end %>

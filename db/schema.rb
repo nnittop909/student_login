@@ -10,13 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170309113205) do
+ActiveRecord::Schema.define(version: 20170314135241) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "alloted_times", force: :cascade do |t|
     t.decimal  "duration"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "courses", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "student_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -40,7 +47,11 @@ ActiveRecord::Schema.define(version: 20170309113205) do
     t.integer  "student_id"
     t.datetime "time_in"
     t.datetime "time_out"
+    t.integer  "course_id"
+    t.integer  "year_level_id"
+    t.index ["course_id"], name: "index_internet_usages_on_course_id", using: :btree
     t.index ["student_id"], name: "index_internet_usages_on_student_id", using: :btree
+    t.index ["year_level_id"], name: "index_internet_usages_on_year_level_id", using: :btree
   end
 
   create_table "logins", force: :cascade do |t|
@@ -56,9 +67,6 @@ ActiveRecord::Schema.define(version: 20170309113205) do
     t.integer  "gender"
     t.string   "id_number"
     t.string   "address"
-    t.string   "course"
-    t.string   "year_level"
-    t.string   "integer"
     t.string   "slug"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
@@ -68,7 +76,11 @@ ActiveRecord::Schema.define(version: 20170309113205) do
     t.datetime "profile_photo_updated_at"
     t.string   "full_name"
     t.integer  "usage_status"
+    t.integer  "course_id"
+    t.integer  "year_level_id"
+    t.index ["course_id"], name: "index_students_on_course_id", using: :btree
     t.index ["slug"], name: "index_students_on_slug", unique: true, using: :btree
+    t.index ["year_level_id"], name: "index_students_on_year_level_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -93,4 +105,13 @@ ActiveRecord::Schema.define(version: 20170309113205) do
     t.index ["username"], name: "index_users_on_username", unique: true, using: :btree
   end
 
+  create_table "year_levels", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "student_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["student_id"], name: "index_year_levels_on_student_id", using: :btree
+  end
+
+  add_foreign_key "year_levels", "students"
 end

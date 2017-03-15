@@ -19,6 +19,7 @@
   <table class="table">
     <thead>
       <tr>
+        <th>Date</th>
         <th>Time In</th>
         <th>Time Out</th>
         <th>Time Consumed</th>
@@ -27,8 +28,9 @@
     <tbody>
       <% @student.internet_usages.each do |internet_usage| %>
         <tr>
-          <td><%= internet_usage.time_in.strftime("%B %d, %Y at %I:%M%p") %></td>
-          <td><%= internet_usage.time_out.strftime("%B %d, %Y at %I:%M%p") %></td>
+          <td><%= internet_usage.time_in.strftime("%B %d, %Y") %></td>
+          <td><%= internet_usage.time_in.strftime("%I:%M%p") %></td>
+          <td><%= internet_usage.time_out.strftime("%I:%M%p") %></td>
           <td><%= internet_usage.usage_in_time_format %></td>
         </tr>
       <% end %>

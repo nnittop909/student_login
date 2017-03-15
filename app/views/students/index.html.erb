@@ -12,6 +12,7 @@
         <th>ID Number</th>
         <th>Gender</th>
         <th>Course/Yr. Level</th>
+        <th>Usage Status</th>
       </tr>
     </thead>
     <tbody>
@@ -21,8 +22,10 @@
           <td><%= student.id_number %></td>
           <td><%= student.gender %></td>
           <td><%= student.course %> - <%= student.year_level %></td>
+          <td><%= student.usage_alert %></td>
         </tr>
       <% end %>
     </tbody>
   </table>
 </div>
+<center><%= paginate @students, params: { controllers: 'students', action: 'index' } %></center>
