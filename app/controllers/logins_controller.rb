@@ -9,7 +9,16 @@ class LoginsController < ApplicationController
     @login.set_status
     @login.destroy
     respond_to do |format|
-      format.html { redirect_to logins_path, notice: 'Student has been signed out.' }
+      format.html { redirect_to logins_path, notice: 'Student has been signed out successfully.' }
+      format.json { head :no_content }
+    end
+  end
+
+  def sign_out_all
+    @logins = Login.all
+    @logins.destroy_all
+    respond_to do |format|
+      format.html { redirect_to logins_path, notice: 'Students has been signed out successfully.' }
       format.json { head :no_content }
     end
   end

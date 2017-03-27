@@ -10,6 +10,7 @@ class StudentInternetUsagesPdf < Prawn::Document
     @student = Student.find(@student_id)
     heading
     display_usage_table
+    footer
   end
 
   def set_date
@@ -71,5 +72,14 @@ class StudentInternetUsagesPdf < Prawn::Document
     [["DATE", "TIME IN", "TIME OUT", "CONSUMED"]] +
     @table_data ||= filtered.map { |e| [e.time_in.strftime("%B %d, %Y"), e.time_in.strftime("%I:%M%p"), e.time_out.strftime("%I:%M%p"), e.usage_in_time_format]} +
     [["", "", "", ""]]
+  end
+
+  def footer
+    bounding_box([bounds.right - 130, bounds.bottom + 25], width: 120, height: 30) do
+      text "#{User.admin.last.full_name.upcase}", size: 11, align: :center, font_style: :bold
+      stroke_horizontal_rule
+      move_down 5
+      text "Internet Administrator", size: 10, align: :center
+    end
   end
 end

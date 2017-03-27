@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   match "internet_usages/scope_to_date" => "internet_usages#scope_to_date",  via: [:get]
   match "internet_usages/student_scope_to_date" => "internet_usages#student_scope_to_date",  via: [:get]
   match "students/scope_to_date" => "students#scope_to_date",  via: [:get]
+  match "logins/sign_out_all" => "logins#sign_out_all",  via: [:get]
 
   resources :students do
     get :autocomplete_student_full_name, on: :collection

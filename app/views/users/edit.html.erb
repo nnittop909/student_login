@@ -12,6 +12,9 @@
           <%=f.error_notification %>
           <%=f.input :email %>
           <%= f.input :username %>
+          <%= f.input :first_name %>
+          <%= f.input :middle_name %>
+          <%= f.input :last_name %>
           <%= f.input :role, collection: User.roles.keys.to_a.map{|a| [a.titleize, a] } %>
           <hr>
           <p class="text-muted">*Please fill up the password and password confirmation to apply the changes.</p>

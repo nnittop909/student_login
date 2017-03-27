@@ -2,15 +2,30 @@
   <br>
   <br>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
+      <%if @student.profile_photo.blank? %>
+        <center>
+          <%=image_tag("default.png", height: 100, width: 100, :class=>"img-square") %>
+          <h4><%= @student.full_name %></h4>
+          <p><%= @student.course %> - <%= @student.year_level %></p>
+        </center>
+      <% else %>
+        <center>
+          <%= image_tag @student.profile_photo.url(:large), class: 'center-block img-responsive img-rounded'%>
+          <h4><%= @student.full_name %></h4>
+          <p><%= @student.course %> - <%= @student.year_level %></p>
+        </center>
+      <% end %>
+    </div>
+    <div class="col-md-3">
       <h3 class="text-center text-warning"><%= @student.internet_usages.total_time_consumption %></h3>
       <p class="text-center">USED</p>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <h3 class="text-center text-success"><%= @student.internet_usages.total_remaining %></h3>
       <p class="text-center">REMAINING</p>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <h3 class="text-center text-danger"><%= @student.internet_usages.excess %></h3>
       <p class="text-center">EXCESS</p>
     </div>

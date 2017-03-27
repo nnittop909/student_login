@@ -10,6 +10,7 @@ class InternetUsagesPdf < Prawn::Document
     @view_context = view_context
     heading
     display_usage_table
+    footer
   end
 
   def set_date
@@ -42,6 +43,18 @@ class InternetUsagesPdf < Prawn::Document
   	text set_date, size: 9, align: :center
   end
 
+  def filtered_1
+    if @course_id.present?
+      Student.all.each do |student|
+        student.internet_usages.where('created_at' => @from_date..@to_date).where('course_id' => @course_id)
+      end
+    elsif @course_id.present? && @year_level_id.present?
+      InternetUsage.where('course_id' => @course_id).where('year_level_id' => @year_level_id).where('created_at' => @from_date..@to_date)
+    elsif @course_id.blank? && @year_level_id.blank?
+      @internet_usages
+    end
+  end
+
   def filtered
     if @course_id.present?
       InternetUsage.where('created_at' => @from_date..@to_date).where('course_id' => @course_id)
@@ -71,7 +84,16 @@ class InternetUsagesPdf < Prawn::Document
   def table_data
     move_down 5
     [["DATE", "STUDENT", "TIME IN", "TIME OUT", "CONSUMED", "REMAINING", "EXCESS"]] +
-    @table_data ||= filtered.map { |e| [e.time_in.strftime("%B %d, %Y"), e.student.full_name, e.time_in.strftime("%I:%M%p"), e.time_out.strftime("%I:%M%p"), e.usage_in_time_format, e.student.internet_usages.total_remaining, e.student.internet_usages.excess]} +
+    @table_data ||= filtered.map { |e| [e.created_at.strftime("%B %d, %Y"), e.student.full_name, e.time_in.strftime("%I:%M%p"), e.time_out.strftime("%I:%M%p"), e.usage_in_time_format, e.student.internet_usages.total_remaining, e.student.internet_usages.excess]} +
     [["", "", "", "", "", "", ""]]
+  end
+
+  def footer
+    bounding_box([bounds.right - 130, bounds.bottom + 25], width: 120, height: 30) do
+      text "#{User.admin.last.full_name.upcase}", size: 11, align: :center, font_style: :bold
+      stroke_horizontal_rule
+      move_down 5
+      text "Internet Administrator", size: 10, align: :center
+    end
   end
 end

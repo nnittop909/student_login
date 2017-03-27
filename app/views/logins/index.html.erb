@@ -13,7 +13,7 @@
 				<th>Used</th>
 				<th>Remaining</th>
 				<th>Excess</th>
-				<th>Option</th>
+				<th><%= link_to "Sign out all", logins_sign_out_all_path, class: 'btn btn-sm btn-danger', data: {confirm: "Are you sure you want to sign out all logged in students?"} %></th>
 			</tr>
 		</thead>
 		<tbody>
