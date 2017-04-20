@@ -14,10 +14,14 @@ class InternetUsagesPdf < Prawn::Document
   end
 
   def set_date
-    if @from_date.strftime("%d") == @to_date.strftime("%d")
-      @to_date.strftime("%B %d, %Y")
-    elsif @from_date.strftime("%d") != @to_date.strftime("%d") || @from_date.strftime("%B") != @to_date.strftime("%B")
-      @from_date.strftime("%B %d, %Y") +" - "+ @to_date.strftime("%B %d, %Y")
+    if (@from_date && @to_date).present?
+      if @from_date.strftime("%d") == @to_date.strftime("%d")
+        @to_date.strftime("%B %d, %Y")
+      elsif @from_date.strftime("%d") != @to_date.strftime("%d") || @from_date.strftime("%B") != @to_date.strftime("%B")
+        @from_date.strftime("%B %d, %Y") +" - "+ @to_date.strftime("%B %d, %Y")
+      end
+    else
+      @internet_usages.first.created_at.strftime("%B %d, %Y") +" - "+ @internet_usages.last.created_at.strftime("%B %d, %Y")
     end
   end
 
@@ -56,11 +60,13 @@ class InternetUsagesPdf < Prawn::Document
   end
 
   def filtered
-    if @course_id.present?
-      InternetUsage.where('created_at' => @from_date..@to_date).where('course_id' => @course_id)
-    elsif @course_id.present? && @year_level_id.present?
-      InternetUsage.where('course_id' => @course_id).where('year_level_id' => @year_level_id).where('created_at' => @from_date..@to_date)
-    elsif @course_id.blank? && @year_level_id.blank?
+    if @course_id.present? && @year_level_id.present? && (@from_date && @to_date).present?
+      @internet_usages.where('course_id' => @course_id).where('year_level_id' => @year_level_id).where('created_at' => @from_date.yesterday.end_of_day..@to_date.end_of_day)
+    elsif @course_id.present? && @year_level_id.blank? && (@from_date && @to_date).present?
+      @internet_usages.where('created_at' => @from_date.yesterday.end_of_day..@to_date.end_of_day).where('course_id' => @course_id)
+    elsif @course_id.blank? && @year_level_id.blank? && (@from_date && @to_date).present?
+      @internet_usages.where('created_at' => @from_date.yesterday.end_of_day..@to_date.end_of_day)
+    elsif @course_id.blank? && @year_level_id.blank? && (@from_date && @to_date).blank?
       @internet_usages
     end
   end
@@ -70,22 +76,55 @@ class InternetUsagesPdf < Prawn::Document
       move_down 10
       text "No internet usages data.", align: :center
     else
-      move_down 10
-      table(table_data, header: true, cell_style: { size: 8, font: "Helvetica"}, column_widths: TABLE_WIDTHS) do
-        row(0).font_style = :bold
-      # /  row(0).background_color = 'DDDDDD'
+      if (@from_date && @to_date).present?
+        if @from_date.strftime("%d") == @to_date.strftime("%d")
+          table(table_data, header: true, cell_style: { size: 8, font: "Helvetica"}, column_widths: [155, 80, 80, 80, 80, 80 ]) do
+            row(0).font_style = :bold
+          # /  row(0).background_color = 'DDDDDD'
 
-        row(-1).font_style = :bold
-        row(-1).size = 11
+            row(-1).font_style = :bold
+            row(-1).size = 11
+          end
+        else
+          table(table_data, header: true, cell_style: { size: 8, font: "Helvetica"}, column_widths: [100, 120, 70, 70, 70, 70, 70 ]) do
+            row(0).font_style = :bold
+          # /  row(0).background_color = 'DDDDDD'
+
+            row(-1).font_style = :bold
+            row(-1).size = 11
+          end
+        end
+      else
+        table(table_data, header: true, cell_style: { size: 8, font: "Helvetica"}, column_widths: [100, 120, 70, 70, 70, 70, 70 ]) do
+            row(0).font_style = :bold
+          # /  row(0).background_color = 'DDDDDD'
+
+            row(-1).font_style = :bold
+            row(-1).size = 11
+          end
       end
+      move_down 10
+      
     end
   end
 
   def table_data
     move_down 5
-    [["DATE", "STUDENT", "TIME IN", "TIME OUT", "CONSUMED", "REMAINING", "EXCESS"]] +
-    @table_data ||= filtered.map { |e| [e.created_at.strftime("%B %d, %Y"), e.student.full_name, e.time_in.strftime("%I:%M%p"), e.time_out.strftime("%I:%M%p"), e.usage_in_time_format, e.student.internet_usages.total_remaining, e.student.internet_usages.excess]} +
-    [["", "", "", "", "", "", ""]]
+    if (@from_date && @to_date).present?
+      if @from_date.strftime("%d") == @to_date.strftime("%d")
+        [["STUDENT", "TIME IN", "TIME OUT", "CONSUMED", "REMAINING", "EXCESS"]] +
+        @table_data ||= filtered.map { |e| [e.student.full_name, e.time_in.strftime("%I:%M%p"), e.time_out.strftime("%I:%M%p"), e.usage_in_time_format, e.student.internet_usages.total_remaining, e.student.internet_usages.excess]} +
+        [["", "", "", "", "", ""]]
+      else
+        [["DATE", "STUDENT", "TIME IN", "TIME OUT", "CONSUMED", "REMAINING", "EXCESS"]] +
+        @table_data ||= filtered.map { |e| [e.created_at.strftime("%B %d, %Y"), e.student.full_name, e.time_in.strftime("%I:%M%p"), e.time_out.strftime("%I:%M%p"), e.usage_in_time_format, e.student.internet_usages.total_remaining, e.student.internet_usages.excess]} +
+        [["", "", "", "", "", "", ""]]
+      end
+    else
+      [["DATE", "STUDENT", "TIME IN", "TIME OUT", "CONSUMED", "REMAINING", "EXCESS"]] +
+        @table_data ||= filtered.map { |e| [e.created_at.strftime("%B %d, %Y"), e.student.full_name, e.time_in.strftime("%I:%M%p"), e.time_out.strftime("%I:%M%p"), e.usage_in_time_format, e.student.internet_usages.total_remaining, e.student.internet_usages.excess]} +
+        [["", "", "", "", "", "", ""]]
+    end
   end
 
   def footer

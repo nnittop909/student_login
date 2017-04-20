@@ -7,19 +7,23 @@ class StudentInternetUsagesPdf < Prawn::Document
     @from_date = from_date
     @to_date = to_date
     @view_context = view_context
-    @student = Student.find(@student_id)
+    @student = Student.find(@student_id) if @student_id.present?
     heading
-    display_usage_table
+    display_usage_table 
     footer
   end
 
   def set_date
-    if @from_date.strftime("%d") == @to_date.strftime("%d")
-      @to_date.strftime("%B %d, %Y")
-    elsif @from_date.strftime("%B") == @to_date.strftime("%B")
-      @from_date.strftime("%B %Y")
-    elsif @from_date.strftime("%d") != @to_date.strftime("%d") || @from_date.strftime("%B") != @to_date.strftime("%B")
-      @from_date.strftime("%B %d, %Y") - @to_date.strftime("%B %d, %Y")
+    if (@from_date && @to_date).present?
+      if @from_date.strftime("%d") == @to_date.strftime("%d")
+        @to_date.strftime("%B %d, %Y")
+      elsif @from_date.strftime("%B") == @to_date.strftime("%B")
+        @from_date.strftime("%B %Y")
+      elsif @from_date.strftime("%d") != @to_date.strftime("%d") || @from_date.strftime("%B") != @to_date.strftime("%B")
+        @from_date.strftime("%B %d, %Y") +" - "+ @to_date.strftime("%B %d, %Y")
+      end
+    else
+      @internet_usages.first.created_at.strftime("%B %d, %Y") +" - "+ @internet_usages.last.created_at.strftime("%B %d, %Y")
     end
   end
 
@@ -31,24 +35,28 @@ class StudentInternetUsagesPdf < Prawn::Document
   	text 'Internet Usage Report', size: 10, align: :center
   	text set_date, size: 8, align: :center
     move_down 10
-    table_title = [["Name: ", "#{@student.try(:full_name)}", "Total Used: ", "#{@student.internet_usages.total_time_consumption}"],
-                  ["ID Number: ", "#{@student.id_number}", "Remaining: ", "#{@student.internet_usages.total_remaining}"],
-                  ["Course/Year: ", "#{@student.course} - #{@student.year_level}", "Excess: ", "#{@student.internet_usages.excess}"]]
-    table(table_title, :cell_style => {size: 9, :padding => [1, 1, 1, 1]}, column_widths: [80, 250, 150, 70]) do
-      cells.borders = []
-      column(1).font_style = :bold
-      column(3).font_style = :bold
-      column(2).align = :right
-      column(3).align = :right
-      column(4).align = :right
+    if @student_id.present?
+      table_title = [["Name: ", "#{@student.try(:full_name)}", "Total Used: ", "#{@student.internet_usages.total_time_consumption}"],
+                    ["ID Number: ", "#{@student.id_number}", "Remaining: ", "#{@student.internet_usages.total_remaining}"],
+                    ["Course/Year: ", "#{@student.course} - #{@student.year_level}", "Excess: ", "#{@student.internet_usages.excess}"]]
+      table(table_title, :cell_style => {size: 9, :padding => [1, 1, 1, 1]}, column_widths: [80, 250, 150, 70]) do
+        cells.borders = []
+        column(1).font_style = :bold
+        column(3).font_style = :bold
+        column(2).align = :right
+        column(3).align = :right
+        column(4).align = :right
+      end
     end
   end
 
   def filtered
-    if @student_id.present?
-      InternetUsage.where('created_at' => @from_date..@to_date).where('student_id' => @student_id)
-    elsif @student_id.blank?
+    if @student_id.present? && (@from_date && @to_date).present?
+      InternetUsage.where('created_at' => @from_date.yesterday.end_of_day..@to_date.end_of_day).where('student_id' => @student_id)
+    elsif @student_id.blank? && (@from_date && @to_date).blank?
       @internet_usages
+    elsif @student_id.present? && (@from_date && @to_date).blank?
+      InternetUsage.where('student_id' => @student_id)
     end
   end
 
@@ -57,12 +65,21 @@ class StudentInternetUsagesPdf < Prawn::Document
       move_down 10
       text "No internet usages data.", align: :center
     else
-      table(table_data, header: true, cell_style: { size: 8, font: "Helvetica"}, column_widths: TABLE_WIDTHS) do
-        row(0).font_style = :bold
-      # /  row(0).background_color = 'DDDDDD'
+      if filtered.blank?
+        text "No internet usages data.", align: :center
+      else
+        if @student_id.present?
+          table(table_data, header: true, cell_style: { size: 8, font: "Helvetica"}, column_widths: TABLE_WIDTHS) do
+            row(0).font_style = :bold
+          # /  row(0).background_color = 'DDDDDD'
 
-        row(-1).font_style = :bold
-        row(-1).size = 11
+            row(-1).font_style = :bold
+            row(-1).size = 11
+          end
+        else
+          move_down 10
+          text "Please Select Student.", align: :center
+        end
       end
     end
   end
