@@ -38,13 +38,18 @@ class InternetUsagesPdf < Prawn::Document
   end
 
   def heading
-  	text "Ifugao State University", size: 8, align: :center
-  	text "Lagawe Campus", size: 8, align: :center
-  	text "Lagawe, Ifugao", size: 8, align: :center
-  	move_down 5
-  	text 'Internet Usage Report', size: 10, align: :center
-    text set_course_and_year_level, size: 9, align: :center
-  	text set_date, size: 9, align: :center
+    bounding_box([bounds.left - 50, bounds.top + 25], width: 652, height: 80) do
+      image "#{Rails.root}/app/assets/images/logo_noback.png", :at => [50,60], :width => 60
+      move_down 25
+      text "Ifugao State University", size: 8, align: :center
+      text "Lagawe Campus", size: 8, align: :center
+      text "Lagawe, Ifugao", size: 8, align: :center
+      move_down 5
+      text 'Internet Usage Report', size: 10, align: :center
+      text set_course_and_year_level, size: 9, align: :center
+      text set_date, size: 9, align: :center
+    end
+  	
   end
 
   def filtered_1

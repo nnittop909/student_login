@@ -6,7 +6,11 @@ class StudentLoginsController < ApplicationController
     if params[:id_number].present?
       @student = Student.friendly.find_by(id_number: params[:id_number])
       if @student.blank?
-        redirect_to student_logins_path, notice: 'ID Number is incorrect or does not exist, please try again!'
+        if request.referer == student_logins_url
+          redirect_to student_logins_path, notice: 'ID Number is incorrect or does not exist, please try again!'
+        else
+          redirect_to landing_index_path, notice: 'ID Number is incorrect or does not exist, please try again!'
+        end
       elsif @student.logins.any?
         if request.referer == student_logins_url
           redirect_to student_logins_path, notice: 'Student is already signed in.'
